@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="NanoWindow.cpp">
+      <Filter>NanoEngine</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="NanoEngine">
+      <UniqueIdentifier>{24278670-3b85-4783-81d8-3ec1877799d1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="NanoHeader.h">
+      <Filter>NanoEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="NanoWindow.h">
+      <Filter>NanoEngine</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

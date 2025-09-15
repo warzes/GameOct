@@ -1,0 +1,10 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/DOC/" />
+  <Project Path="3rdparty/3rdparty.vcxproj" Id="afbcab76-815d-4264-80dc-62bce2068c35" />
+  <Project Path="Game/Game.vcxproj" Id="b535e118-7aae-4868-beaf-f3285a218ee4">
+    <BuildDependency Project="3rdparty/3rdparty.vcxproj" />
+  </Project>
+</Solution>
