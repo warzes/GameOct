@@ -5,6 +5,12 @@
     <ClCompile Include="NanoWindow.cpp">
       <Filter>NanoEngine</Filter>
     </ClCompile>
+    <ClCompile Include="NanoCore.cpp">
+      <Filter>NanoEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="NanoInput.cpp">
+      <Filter>NanoEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NanoEngine">
@@ -16,6 +22,12 @@
       <Filter>NanoEngine</Filter>
     </ClInclude>
     <ClInclude Include="NanoWindow.h">
+      <Filter>NanoEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="NanoCore.h">
+      <Filter>NanoEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="NanoInput.h">
       <Filter>NanoEngine</Filter>
     </ClInclude>
   </ItemGroup>

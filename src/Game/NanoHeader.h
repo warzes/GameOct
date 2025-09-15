@@ -6,6 +6,8 @@
 #	pragma warning(disable : 5039)
 #endif
 
+#define _USE_MATH_DEFINES
+
 #include <cstdint>
 #include <cmath>
 #include <chrono>
@@ -54,6 +56,8 @@
 #define NOMCX
 #define NOCRYPT
 #include <Windows.h>
+
+#include <glad/gl.h>
 
 #endif // _WIN32
 

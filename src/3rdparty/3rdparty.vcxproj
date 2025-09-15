@@ -11,7 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FileName.cpp" />
+    <ClCompile Include="glad\gl.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="glad\gl.h" />
+    <ClInclude Include="KHR\khrplatform.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>

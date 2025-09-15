@@ -1,6 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="FileName.cpp" />
+    <ClCompile Include="glad\gl.c">
+      <Filter>glad</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="glad">
+      <UniqueIdentifier>{2d7d0200-4481-4206-a489-4f3e2932b9ca}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="glad\gl.h">
+      <Filter>glad</Filter>
+    </ClInclude>
+    <ClInclude Include="KHR\khrplatform.h">
+      <Filter>glad</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
