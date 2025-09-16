@@ -96,6 +96,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NanoCore.cpp" />
+    <ClCompile Include="NanoEngine.cpp" />
     <ClCompile Include="NanoInput.cpp" />
     <ClCompile Include="NanoRender.cpp" />
     <ClCompile Include="NanoWindow.cpp" />
@@ -106,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NanoCore.h" />
+    <ClInclude Include="NanoEngine.h" />
     <ClInclude Include="NanoHeader.h" />
     <ClInclude Include="NanoInput.h" />
     <ClInclude Include="NanoRender.h" />

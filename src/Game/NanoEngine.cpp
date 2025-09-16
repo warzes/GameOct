@@ -1,38 +1,52 @@
 #include "stdafx.h"
+#include "NanoEngine.h"
 #include "NanoCore.h"
 //=============================================================================
-namespace app { extern void Exit(); }
+Window window;
+Input  input;
+Render render;
+bool IsExit{ true };
 //=============================================================================
-void Print(const std::string& msg)
+bool app::Init(const AppCreateInfo& createInfo)
 {
-	puts(msg.c_str());
+	IsExit = false;
+	if (!window.Init(createInfo.window))
+		return false;
+	input.Init();
+	if (!render.Init(createInfo.render))
+		return false;
+
+	return true;
 }
 //=============================================================================
-void Info(const std::string& msg)
+void app::Close()
 {
-	Print("\033[32m[INFO]:\033[0m " + msg);
+	IsExit = true;
+	render.Close();
+	window.Close();
 }
 //=============================================================================
-void Warning(const std::string& msg)
+bool app::IsRunning()
 {
-	Print("\033[33m[WARNING]:\033[0m " + msg);
+	return window.IsRunning() && !IsExit;
 }
 //=============================================================================
-void Debug(const std::string& msg)
+void app::BeginFrame()
 {
-#if defined(_DEBUG)
-	Print("\033[36m[DEBUG]:\033[0m " + msg);
-#endif
+	window.ProcessEvents();
+	input.Update();
+
+	render.BeginFrame();
 }
 //=============================================================================
-void Error(const std::string& msg)
+void app::EndFrame()
 {
-	Print("\033[31m[ERROR]:\033[0m " + msg);
+	render.EndFrame();
+	window.SwapBuffers();
 }
 //=============================================================================
-void Fatal(const std::string& msg)
+void app::Exit()
 {
-	Print("\033[35m[FATAL]:\033[0m " + msg);
-	app::Exit();
+	IsExit = true;
 }
 //=============================================================================

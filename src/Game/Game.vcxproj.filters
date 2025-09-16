@@ -14,6 +14,10 @@
     <ClCompile Include="NanoRender.cpp">
       <Filter>NanoEngine</Filter>
     </ClCompile>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="NanoEngine.cpp">
+      <Filter>NanoEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NanoEngine">
@@ -34,6 +38,10 @@
       <Filter>NanoEngine</Filter>
     </ClInclude>
     <ClInclude Include="NanoRender.h">
+      <Filter>NanoEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="NanoEngine.h">
       <Filter>NanoEngine</Filter>
     </ClInclude>
   </ItemGroup>

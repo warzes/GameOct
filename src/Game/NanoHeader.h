@@ -9,6 +9,7 @@
 #define _USE_MATH_DEFINES
 
 #include <cstdint>
+#include <cassert>
 #include <cmath>
 #include <chrono>
 #include <algorithm>
