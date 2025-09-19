@@ -30,9 +30,9 @@ float verts[] = {
 0.0f,  0.5f
 };
 
-std::optional<Program> program;
-std::optional<VertexArray> vao;
-std::optional<Buffer> vbo;
+GLuint program;
+GLuint vao;
+GLuint vbo;
 
 bool InitGame()
 {
@@ -41,12 +41,13 @@ bool InitGame()
 	if (!app::Init(appCI))
 		return false;
 
-	program = gl::InitProgram(sceneVertexSource, sceneFragmentSource);
-	vbo = Buffer();
-	vao = VertexArray();
+	program = gl::CreateShaderProgram(sceneVertexSource, sceneFragmentSource);
+	
+	glGenBuffers(1, &vbo);
+	glGenVertexArrays(1, &vao);
 
-	glBindVertexArray(vao->id());
-	glBindBuffer(GL_ARRAY_BUFFER, vbo->id());
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
@@ -57,9 +58,9 @@ bool InitGame()
 //=============================================================================
 void CloseGame()
 {
-	vbo = {};
-	program = {};
-	vao = {};
+	glDeleteProgram(program);
+	glDeleteBuffers(1, &vbo);
+	glDeleteVertexArrays(1, &vao);
 
 	app::Close();
 }
@@ -76,8 +77,8 @@ void FrameGame()
 	glClearColor(0.1f, 0.2f, 0.7f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glUseProgram(program->id());
-	glBindVertexArray(vao->id());
+	glUseProgram(program);
+	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 //=============================================================================

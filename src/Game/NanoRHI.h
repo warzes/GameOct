@@ -159,12 +159,9 @@ using Query = GLObject<GLFunc::Query>;
 
 namespace gl
 {
-	Program InitProgram(std::string_view vertexShader);
-	Program InitProgram(std::string_view vertexShader, std::string_view fragmentShader);
-	Program InitProgram(std::string_view vertexShader, std::string_view geometryShader, std::string_view fragmentShader);
-	Program InitProgram(Shader* vertexShader);
-	Program InitProgram(Shader* vertexShader, Shader* fragmentShader);
-	Program InitProgram(Shader* vertexShader, Shader* geometryShader, Shader* fragmentShader);
+	GLuint CreateShaderProgram(std::string_view vertexShader);
+	GLuint CreateShaderProgram(std::string_view vertexShader, std::string_view fragmentShader);
+	GLuint CreateShaderProgram(std::string_view vertexShader, std::string_view geometryShader, std::string_view fragmentShader);
 
 } // namespace gl
 
