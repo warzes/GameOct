@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "NanoRHI.h"
 #include "NanoCore.h"
+#include "NanoMath.h"
 //=============================================================================
 [[nodiscard]] inline std::string shaderStageToString(GLenum stage)
 {
@@ -83,52 +84,52 @@
 	return shader;
 }
 //=============================================================================
-GLuint gl::CreateShaderProgram(std::string_view vertexShader)
+GLuint CreateShaderProgram(std::string_view vertexShader)
 {
 	return CreateShaderProgram(vertexShader, "", "");
 }
 //=============================================================================
-GLuint gl::CreateShaderProgram(std::string_view vertexShader, std::string_view fragmentShader)
+GLuint CreateShaderProgram(std::string_view vertexShader, std::string_view fragmentShader)
 {
 	return CreateShaderProgram(vertexShader, "", fragmentShader);
 }
 //=============================================================================
-GLuint gl::CreateShaderProgram(std::string_view vertexShader, std::string_view geometryShader, std::string_view fragmentShader)
+GLuint CreateShaderProgram(std::string_view vertexShader, std::string_view geometryShader, std::string_view fragmentShader)
 {
-	GLuint program = glCreateProgram();
-	GLuint vs{ 0 };
-	GLuint gs{ 0 };
-	GLuint fs{ 0 };
+	struct shader final
+	{
+		~shader() { if (id) glDeleteShader(id); }
+		GLuint id{ 0 };
+	};
 
+	shader vs;
 	if (!vertexShader.empty())
 	{
-		vs = compileShaderGLSL(GL_VERTEX_SHADER, vertexShader);
-		if (!vs) return 0;
+		vs.id = compileShaderGLSL(GL_VERTEX_SHADER, vertexShader);
+		if (!vs.id) return 0;
 	}
+	shader gs;
 	if (!geometryShader.empty())
 	{
-		gs = compileShaderGLSL(GL_GEOMETRY_SHADER, geometryShader);
-		if (!gs)
-		{
-			if (vs) glDeleteShader(vs);
-			return 0;
-		}
+		gs.id = compileShaderGLSL(GL_GEOMETRY_SHADER, geometryShader);
+		if (!gs.id) return 0;
 	}
+	shader fs;
 	if (!fragmentShader.empty())
 	{
-		fs = compileShaderGLSL(GL_FRAGMENT_SHADER, fragmentShader);
-		if (!fs)
-		{
-			if (vs) glDeleteShader(vs);
-			if (gs) glDeleteShader(gs);
-			return 0;
-		}
+		fs.id = compileShaderGLSL(GL_FRAGMENT_SHADER, fragmentShader);
+		if (!fs.id) return 0;
+	}
+	if (vs.id == 0 && gs.id == 0 && fs.id == 0)
+	{
+		Error("Shader not valid");
+		return 0;
 	}
 
-	if (vs) glAttachShader(program, vs);
-	if (gs) glAttachShader(program, gs);
-	if (fs) glAttachShader(program, fs);
-
+	GLuint program = glCreateProgram();
+	if (vs.id) glAttachShader(program, vs.id);
+	if (gs.id) glAttachShader(program, gs.id);
+	if (fs.id) glAttachShader(program, fs.id);
 	glLinkProgram(program);
 
 	GLint success{ 0 };
@@ -145,10 +146,66 @@ GLuint gl::CreateShaderProgram(std::string_view vertexShader, std::string_view g
 		program = 0;
 	}
 
-	if (vs) glDeleteShader(vs);
-	if (gs) glDeleteShader(gs);
-	if (fs) glDeleteShader(fs);
-
 	return program;
+}
+//=============================================================================
+void SpecifyVertexAttributes(GLuint shaderProgram, size_t vertexSize, std::span<const VertexAttribute> attributes)
+{
+	assert(shaderProgram > 0);
+	assert(vertexSize > 0);
+
+	glUseProgram(shaderProgram);
+	for (size_t i = 0; i < attributes.size(); i++)
+	{
+		const auto& attr = attributes[i];
+		glEnableVertexAttribArray(attr.index);
+		glVertexAttribPointer(attr.index, attr.size, attr.type, attr.normalized ? GL_TRUE : GL_FALSE, vertexSize, attr.offset);
+		glVertexAttribDivisor(attr.index, attr.perInstance ? 1 : 0);
+	}
+}
+//=============================================================================
+int GetUniformLocation(GLuint program, std::string_view name)
+{
+	return glGetUniformLocation(program, name.data());
+}
+//=============================================================================
+void SetUniform(GLuint id, float s)
+{
+	glUniform1f(id, s);
+}
+//=============================================================================
+void SetUniform(GLuint id, int s)
+{
+	glUniform1i(id, s);
+}
+//=============================================================================
+void SetUniform(GLuint id, const Vec2& v)
+{
+	glUniform2fv(id, 1, &v.x);
+}
+//=============================================================================
+void SetUniform(GLuint id, const Vec3& v)
+{
+	glUniform3fv(id, 1, &v.x);
+}
+//=============================================================================
+void SetUniform(GLuint id, const Vec4& v)
+{
+	glUniform4fv(id, 1, &v.x);
+}
+//=============================================================================
+void SetUniform(GLuint id, const Quat& v)
+{
+	glUniform4fv(id, 1, &v.w);
+}
+//=============================================================================
+void SetUniform(GLuint id, const Mat3& m)
+{
+	glUniformMatrix3fv(id, 1, GL_FALSE, m.value);
+}
+//=============================================================================
+void SetUniform(GLuint id, const Mat4& m)
+{
+	glUniformMatrix4fv(id, 1, GL_FALSE, m.value);
 }
 //=============================================================================

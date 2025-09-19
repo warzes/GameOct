@@ -5,29 +5,57 @@
 #	pragma comment( lib, "3rdparty.lib" )
 #endif
 //=============================================================================
-const char* sceneVertexSource = R"glsl(#version 330 core
-layout(location = 0) in vec2 pos;
-void main() { gl_Position = vec4(pos, 0.0, 1.0); }
-)glsl";
+const char* sceneVertexSource = R"glsl(
+#version 330 core
 
-const GLchar* sceneFragmentSource = R"glsl(#version 330 core
+in layout (location = 0) vec3 in_position;
+in layout (location = 1) vec4 in_color;
+
+uniform vec3 position_offset = vec3(0, 0, 0);
+
 out vec4 color;
-void main() { color = vec4(1, 0.2, 0.7, 1); }
+
+void main()
+{
+	gl_Position = vec4(position_offset + in_position, 1);
+	color = in_color;
+}
 )glsl";
 
-//struct Vertex {
-//	Vec3 position;
-//	Vec3 normal;
-//	Vec2 uv;
-//	// всего 3*4 + 3*4 + 2*4 = 32 байта, выравнивание по 4 байтам — OK
-//};
-//static_assert(std::is_standard_layout_v<Vertex>, "Vertex must be standard layout");
-//static_assert(sizeof(Vertex) == 32, "Vertex size is not 32 bytes");
+const GLchar* sceneFragmentSource = R"glsl(
+#version 330 core
 
-float verts[] = {
--0.5f, -0.5f,
-0.5f, -0.5f,
-0.0f,  0.5f
+in vec4 color;
+
+layout (location = 0) out vec4 out_color;
+
+void main()
+{
+	out_color = color;
+}
+)glsl";
+
+struct Vertex
+{
+	Vec3 position;
+	Vec4 color;
+};
+std::vector<Vertex> vertices;
+VertexAttribute attributes[] =
+{
+	{
+		.index = 0,
+		.type = GL_FLOAT,
+		.size = 3,
+		.offset = (const void*)offsetof(Vertex, position)
+	},
+	{
+		.index = 1,
+		.type = GL_FLOAT,
+		.size = 4,
+		.offset = (const void*)offsetof(Vertex, color)
+	}
+
 };
 
 GLuint program;
@@ -41,16 +69,22 @@ bool InitGame()
 	if (!app::Init(appCI))
 		return false;
 
-	program = gl::CreateShaderProgram(sceneVertexSource, sceneFragmentSource);
+	program = CreateShaderProgram(sceneVertexSource, sceneFragmentSource);
 	
 	glGenBuffers(1, &vbo);
 	glGenVertexArrays(1, &vao);
 
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+
+	vertices.push_back(Vertex(Vec3(0, 0, 0), Vec4(1, 0, 0, 1)));
+	vertices.push_back(Vertex(Vec3(1, 0, 0), Vec4(0, 1, 0, 1)));
+	vertices.push_back(Vertex(Vec3(0, 1, 0), Vec4(0, 0, 1, 1)));
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
+
+	SpecifyVertexAttributes(program, sizeof(Vertex), attributes);
+
 	glBindVertexArray(0);
 
 	return true;
@@ -78,6 +112,11 @@ void FrameGame()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glUseProgram(program);
+
+	static float x = 3.0f;  x += 0.001f;
+	Vec3 position_offset = Vec3(sinf(x), 0, 0);
+	SetUniform(GetUniformLocation(program, "position_offset"), position_offset);
+
 	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
