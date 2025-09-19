@@ -7,6 +7,7 @@ class Shader final
 {
 public:
 	Shader(GLenum type) : m_id(glCreateShader(type)) {}
+	Shader(std::nullopt_t) {} // no valid
 	~Shader() { Reset(); }
 	Shader(const Shader&) = delete;
 	Shader(Shader&& other) noexcept : m_id(std::exchange(other.m_id, 0)) {}
@@ -32,7 +33,7 @@ public:
 	[[nodiscard]] GLuint id() const noexcept { return m_id; }
 	explicit operator GLuint() const noexcept { return m_id; }
 
-	explicit operator bool() const noexcept { return m_id > 0; }
+	[[nodiscard]] bool IsValid() const noexcept { return m_id > 0; }
 private:
 	GLuint m_id{ 0 };
 };
@@ -41,6 +42,7 @@ class Program final
 {
 public:
 	Program() : m_id(glCreateProgram()) {}
+	Program(std::nullopt_t) {} // no valid
 	~Program() { Reset(); }
 
 	Program(const Program&) = delete;
@@ -68,7 +70,7 @@ public:
 	[[nodiscard]] GLuint id() const noexcept { return m_id; }
 	explicit operator GLuint() const noexcept { return m_id; }
 
-	explicit operator bool() const noexcept { return m_id > 0; }
+	[[nodiscard]] bool IsValid() const noexcept { return m_id > 0; }
 private:
 	GLuint m_id{ 0 };
 };
@@ -86,6 +88,7 @@ class GLObject
 {
 public:
 	GLObject() { invokeCreate(); }
+	GLObject(std::nullopt_t) {} // no valid
 	~GLObject() { Reset(); }
 	GLObject(const GLObject&) = delete;
 	GLObject(GLObject&& other) noexcept : m_id(std::exchange(other.m_id, 0)) {}
@@ -110,7 +113,8 @@ public:
 
 	[[nodiscard]] GLuint id() const noexcept { return m_id; }
 	explicit operator GLuint() const noexcept { return m_id; }
-	explicit operator bool() const noexcept { return m_id > 0; }
+
+	[[nodiscard]] bool IsValid() const noexcept { return m_id > 0; }
 
 private:
 	constexpr void invokeCreate()
@@ -149,38 +153,18 @@ using Framebuffer = GLObject<GLFunc::Framebuffer>;
 
 using Query = GLObject<GLFunc::Query>;
 
-
-using ShaderRef = std::shared_ptr<Shader>;
-using ProgramRef = std::shared_ptr<Program>;
-
-using VertexArrayRef = std::shared_ptr<VertexArray>;
-using BufferRef = std::shared_ptr<Buffer>;
-
-using TextureRef = std::shared_ptr<Texture>;
-using SamplerRef = std::shared_ptr<Sampler>;
-
-using RenderbufferRef = std::shared_ptr<Renderbuffer>;
-using FramebufferRef = std::shared_ptr<Framebuffer>;
-
-using QueryRef = std::shared_ptr<Query>;
-
 //=============================================================================
 // Resource Modify
 //=============================================================================
 
 namespace gl
 {
-
-
-	ProgramRef InitProgram(std::string_view vertexShader);
-	ProgramRef InitProgram(std::string_view vertexShader, std::string_view fragmentShader);
-	ProgramRef InitProgram(std::string_view vertexShader, std::string_view geometryShader, std::string_view fragmentShader);
-	ProgramRef InitProgram(ShaderRef vertexShader);
-	ProgramRef InitProgram(ShaderRef vertexShader, ShaderRef fragmentShader);
-	ProgramRef InitProgram(ShaderRef vertexShader, ShaderRef geometryShader, ShaderRef fragmentShader);
-
-
-
+	Program InitProgram(std::string_view vertexShader);
+	Program InitProgram(std::string_view vertexShader, std::string_view fragmentShader);
+	Program InitProgram(std::string_view vertexShader, std::string_view geometryShader, std::string_view fragmentShader);
+	Program InitProgram(Shader* vertexShader);
+	Program InitProgram(Shader* vertexShader, Shader* fragmentShader);
+	Program InitProgram(Shader* vertexShader, Shader* geometryShader, Shader* fragmentShader);
 
 } // namespace gl
 

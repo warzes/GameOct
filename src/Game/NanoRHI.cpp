@@ -39,29 +39,29 @@
 	return oss.str();
 }
 //=============================================================================
-[[nodiscard]] inline ShaderRef compileShaderGLSL(GLenum stage, std::string_view sourceGLSL)
+[[nodiscard]] inline Shader compileShaderGLSL(GLenum stage, std::string_view sourceGLSL)
 {
 	const GLchar* strings = sourceGLSL.data();
-	ShaderRef shader = std::make_shared<Shader>(stage);
-	if (!shader)
+	Shader shader(stage);
+	if (!shader.IsValid())
 	{
 		Error("Failed to create OpenGL shader object for stage: " + std::string(shaderStageToString(stage)));
-		return nullptr;
+		return { std::nullopt };
 	}
-	glShaderSource(shader->id(), 1, &strings, nullptr);
-	glCompileShader(shader->id());
+	glShaderSource(shader.id(), 1, &strings, nullptr);
+	glCompileShader(shader.id());
 
 	GLint success{ 0 };
-	glGetShaderiv(shader->id(), GL_COMPILE_STATUS, &success);
+	glGetShaderiv(shader.id(), GL_COMPILE_STATUS, &success);
 	if (success == GL_FALSE)
 	{
 		GLint infoLength{ 0 };
-		glGetShaderiv(shader->id(), GL_INFO_LOG_LENGTH, &infoLength);
+		glGetShaderiv(shader.id(), GL_INFO_LOG_LENGTH, &infoLength);
 		std::string infoLog;
 		if (infoLength > 1)
 		{
 			infoLog.resize(static_cast<size_t>(infoLength - 1)); // исключаем \0
-			glGetShaderInfoLog(shader->id(), infoLength, nullptr, infoLog.data());
+			glGetShaderInfoLog(shader.id(), infoLength, nullptr, infoLog.data());
 		}
 		else
 		{
@@ -71,72 +71,80 @@
 		std::string logError = "OPENGL " + shaderStageToString(stage) + ": Shader compilation failed: " + infoLog;
 		if (strings != nullptr) logError += ", Source: \n" + printShaderSource(strings);
 		Error(logError);
-		return nullptr;
+		return { std::nullopt };
 	}
 
 	return shader;
 }
 //=============================================================================
-ProgramRef gl::InitProgram(std::string_view vertexShader)
+Program gl::InitProgram(std::string_view vertexShader)
 {
-	ShaderRef shader = compileShaderGLSL(GL_VERTEX_SHADER, vertexShader);
-	return InitProgram(shader);
+	Shader shader = compileShaderGLSL(GL_VERTEX_SHADER, vertexShader);
+	return InitProgram(&shader);
 }
 //=============================================================================
-ProgramRef gl::InitProgram(std::string_view vertexShaderSource, std::string_view fragmentShaderSource)
+Program gl::InitProgram(std::string_view vertexShaderSource, std::string_view fragmentShaderSource)
 {
-	ShaderRef vertexShader = compileShaderGLSL(GL_VERTEX_SHADER, vertexShaderSource);
-	if (!vertexShader) return nullptr;
-	ShaderRef fragmentShader = compileShaderGLSL(GL_FRAGMENT_SHADER, fragmentShaderSource);
-	if (!fragmentShader) return nullptr;
-	return InitProgram(vertexShader, fragmentShader);
+	Shader vertexShader = compileShaderGLSL(GL_VERTEX_SHADER, vertexShaderSource);
+	Shader fragmentShader = compileShaderGLSL(GL_FRAGMENT_SHADER, fragmentShaderSource);
+	return InitProgram(&vertexShader,&fragmentShader);
 }
 //=============================================================================
-ProgramRef gl::InitProgram(std::string_view vertexShaderSource, std::string_view geometryShaderSource, std::string_view fragmentShaderSource)
+Program gl::InitProgram(std::string_view vertexShaderSource, std::string_view geometryShaderSource, std::string_view fragmentShaderSource)
 {
-	ShaderRef vertexShader = compileShaderGLSL(GL_VERTEX_SHADER, vertexShaderSource);
-	if (!vertexShader) return nullptr;
-	ShaderRef geometryShader = compileShaderGLSL(GL_GEOMETRY_SHADER, geometryShaderSource);
-	if (!geometryShader) return nullptr;
-	ShaderRef fragmentShader = compileShaderGLSL(GL_FRAGMENT_SHADER, fragmentShaderSource);
-	if (!fragmentShader) return nullptr;
-	return InitProgram(vertexShader, geometryShader, fragmentShader);
+	Shader vertexShader = compileShaderGLSL(GL_VERTEX_SHADER, vertexShaderSource);
+	Shader geometryShader = compileShaderGLSL(GL_GEOMETRY_SHADER, geometryShaderSource);
+	Shader fragmentShader = compileShaderGLSL(GL_FRAGMENT_SHADER, fragmentShaderSource);
+	return InitProgram(&vertexShader, &geometryShader, &fragmentShader);
 }
 //=============================================================================
-ProgramRef gl::InitProgram(ShaderRef vertexShader)
+Program gl::InitProgram(Shader* vertexShader)
 {
 	return InitProgram(vertexShader, nullptr, nullptr);
 }
 //=============================================================================
-ProgramRef gl::InitProgram(ShaderRef vertexShader, ShaderRef fragmentShader)
+Program gl::InitProgram(Shader* vertexShader, Shader* fragmentShader)
 {
 	return InitProgram(vertexShader, nullptr, fragmentShader);
 }
 //=============================================================================
-ProgramRef gl::InitProgram(ShaderRef vertexShader, ShaderRef geometryShader, ShaderRef fragmentShader)
+Program gl::InitProgram(Shader* vertexShader, Shader* geometryShader, Shader* fragmentShader)
 {
-	assert(vertexShader && "A graphics pipeline must at least have a vertex shader");
+	if (!vertexShader || !vertexShader->IsValid())
+	{
+		Error("Vertex Shader not valid");
+		return { std::nullopt };
+	}
+	if (geometryShader && !geometryShader->IsValid())
+	{
+		Error("Geometry Shader not valid");
+		return { std::nullopt };
+	}
+	if (fragmentShader && !fragmentShader->IsValid())
+	{
+		Error("Fragment Shader not valid");
+		return { std::nullopt };
+	}
 
-	ProgramRef program = std::make_shared<Program>();
+	Program program;
+	if (vertexShader)   glAttachShader(program.id(), vertexShader->id());
+	if (geometryShader) glAttachShader(program.id(), geometryShader->id());
+	if (fragmentShader) glAttachShader(program.id(), fragmentShader->id());
 
-	glAttachShader(program->id(), vertexShader->id());
-	if (geometryShader) glAttachShader(program->id(), geometryShader->id());
-	if (fragmentShader) glAttachShader(program->id(), fragmentShader->id());
-
-	glLinkProgram(program->id());
+	glLinkProgram(program.id());
 
 	GLint success{ 0 };
-	glGetProgramiv(program->id(), GL_LINK_STATUS, &success);
+	glGetProgramiv(program.id(), GL_LINK_STATUS, &success);
 	if (!success)
 	{
 		GLint length = 512;
-		glGetProgramiv(program->id(), GL_INFO_LOG_LENGTH, &length);
+		glGetProgramiv(program.id(), GL_INFO_LOG_LENGTH, &length);
 		std::string infoLog;
 		infoLog.resize(static_cast<size_t>(length + 1), '\0');
-		glGetProgramInfoLog(program->id(), length, nullptr, infoLog.data());
-		glDeleteProgram(program->id());
+		glGetProgramInfoLog(program.id(), length, nullptr, infoLog.data());
+		glDeleteProgram(program.id());
 		Error("Failed to compile graphics pipeline.\n" + infoLog);
-		return nullptr;
+		return Program(std::nullopt);
 	}
 
 	return program;
