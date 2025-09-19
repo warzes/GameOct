@@ -24,10 +24,25 @@
     <ClCompile Include="NanoMath.cpp">
       <Filter>NanoEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>temp</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>temp</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>temp</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>temp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NanoEngine">
       <UniqueIdentifier>{24278670-3b85-4783-81d8-3ec1877799d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="temp">
+      <UniqueIdentifier>{9369b54d-b18d-4226-bdd2-4d16f10496f8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +70,21 @@
     </ClInclude>
     <ClInclude Include="NanoMath.h">
       <Filter>NanoEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawable.h">
+      <Filter>temp</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>temp</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>temp</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>temp</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>temp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

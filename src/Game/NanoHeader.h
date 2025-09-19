@@ -79,6 +79,10 @@
 
 #include <stb/stb_image.h>
 
+#include <assimp/scene.h>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+
 #if defined(_MSC_VER)
 #	pragma warning(pop)
 #endif
