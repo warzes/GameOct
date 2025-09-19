@@ -1,55 +1,51 @@
-#pragma once
+﻿#pragma once
+
+#include "NanoRHI.h"
 
 //=============================================================================
 // Core
 //=============================================================================
 
-struct Rect2D;
+//=============================================================================
+// Vertex Arrays
+//=============================================================================
+
 
 //=============================================================================
-// Graphics Pipeline
+// Shader Program
 //=============================================================================
-struct GraphicsPipelineInfo final
-{
-	std::string vertexShader{};
-	std::string geometryShader{};
-	std::string fragmentShader{};
-};
 
-struct GraphicsPipeline final
+class ShaderProgram final
 {
-	GraphicsPipeline(const GraphicsPipelineInfo& info);
-	~GraphicsPipeline();
-	GraphicsPipeline(const GraphicsPipeline&) = delete;
-	GraphicsPipeline(GraphicsPipeline&& old) noexcept;
-	GraphicsPipeline& operator=(const GraphicsPipeline&) = delete;
-	GraphicsPipeline& operator=(GraphicsPipeline&& old) noexcept;
+public:
+	ShaderProgram(std::string_view vertexShader);
+	ShaderProgram(std::string_view vertexShader, std::string_view fragmentShader);
+	ShaderProgram(std::string_view vertexShader, std::string_view geometryShader, std::string_view fragmentShader);
+	~ShaderProgram();
 
-	[[nodiscard]] bool IsValid() const { return m_id > 0; }
-	[[nodiscard]] auto Handle() const { return m_id; }
+	ShaderProgram(const ShaderProgram&) = delete;
+	ShaderProgram(ShaderProgram&& old) noexcept;
+	ShaderProgram& operator=(const ShaderProgram&) = delete;
+	ShaderProgram& operator=(ShaderProgram&& old) noexcept;
+
+
+	[[nodiscard]] bool IsValid() const noexcept { return m_id > 0; }
+	[[nodiscard]] auto Handle() const noexcept { return m_id; }
 
 private:
 	unsigned m_id{ 0 };
 };
 
-//=============================================================================
-// Compute Pipeline
-//=============================================================================
-
-struct ComputePipelineInfo final
-{
-	std::string shader{};
-};
 
 //=============================================================================
 // Cmd
 //=============================================================================
 namespace cmd
 {
-	void BindGraphicsPipeline(const GraphicsPipeline& pipeline);
+	void BindShaderProgram(const ShaderProgram& pipeline);
 
-	void SetViewport(const Rect2D& viewport);
-	void SetScissor(const Rect2D& scissor);
+	void SetViewport(uint16_t x, uint16_t y, uint16_t width, uint16_t height);
+	void SetScissor(uint16_t x, uint16_t y, uint16_t width, uint16_t height);
 } // namespace cmd
 
 //=============================================================================

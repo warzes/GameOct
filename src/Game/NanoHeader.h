@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <string>
 #include <string_view>
+#include <array>
 #include <span>
 #include <vector>
 #include <unordered_map>

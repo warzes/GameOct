@@ -1,5 +1,7 @@
 #pragma once
 
+#include "NanoCore.h"
+#include "NanoMath.h"
 #include "NanoWindow.h"
 #include "NanoInput.h"
 #include "NanoRender.h"

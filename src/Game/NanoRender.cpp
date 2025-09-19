@@ -4,9 +4,16 @@
 //=============================================================================
 namespace
 {
-	Rect2D currentViewport = { 0, 0, 0, 0 };
-	bool   scissorEnabled{ false };
-	Rect2D currentScissor = { 0, 0, 0, 0 };
+	uint16_t currentViewportX{ 0u };
+	uint16_t currentViewportY{ 0u };
+	uint16_t currentViewportWidth{ 0u };
+	uint16_t currentViewportHeight{ 0u };
+
+	bool     scissorEnabled{ false };
+	uint16_t currentScissorX{ 0u };
+	uint16_t currentScissorY{ 0u };
+	uint16_t currentScissorWidth{ 0u };
+	uint16_t currentScissorHeight{ 0u };
 }
 //=============================================================================
 [[nodiscard]] inline std::string shaderStageToString(GLenum stage)
@@ -85,9 +92,20 @@ namespace
 	return shader;
 }
 //=============================================================================
-GraphicsPipeline::GraphicsPipeline(const GraphicsPipelineInfo& info)
+ShaderProgram::ShaderProgram(std::string_view vertexShader)
+	: ShaderProgram(vertexShader, "", "")
 {
-	assert(!info.vertexShader.empty() && "A graphics pipeline must at least have a vertex shader");
+}
+//=============================================================================
+ShaderProgram::ShaderProgram(std::string_view vertexShader, std::string_view fragmentShader)
+	: ShaderProgram(vertexShader, "", fragmentShader)
+{
+
+}
+//=============================================================================
+ShaderProgram::ShaderProgram(std::string_view vertexShader, std::string_view geometryShader, std::string_view fragmentShader)
+{
+	assert(!vertexShader.empty() && "A graphics pipeline must at least have a vertex shader");
 
 	struct shader final
 	{
@@ -96,20 +114,20 @@ GraphicsPipeline::GraphicsPipeline(const GraphicsPipelineInfo& info)
 		GLuint id{ 0 };
 	};
 
-	shader vs(compileShaderGLSL(GL_VERTEX_SHADER, info.vertexShader));
+	shader vs(compileShaderGLSL(GL_VERTEX_SHADER, vertexShader));
 	if (!vs.id) return;
 
 	shader gs{ 0 };
-	if (!info.geometryShader.empty())
+	if (!geometryShader.empty())
 	{
-		gs.id = compileShaderGLSL(GL_GEOMETRY_SHADER, info.geometryShader);
+		gs.id = compileShaderGLSL(GL_GEOMETRY_SHADER, geometryShader);
 		if (!gs.id) return;
 	}
 
 	shader fs{ 0 };
-	if (!info.fragmentShader.empty())
+	if (!fragmentShader.empty())
 	{
-		fs.id = compileShaderGLSL(GL_FRAGMENT_SHADER, info.fragmentShader);
+		fs.id = compileShaderGLSL(GL_FRAGMENT_SHADER, fragmentShader);
 		if (!fs.id) return;
 	}
 
@@ -122,7 +140,7 @@ GraphicsPipeline::GraphicsPipeline(const GraphicsPipelineInfo& info)
 
 	glLinkProgram(program);
 
-	GLint success{0};
+	GLint success{ 0 };
 	glGetProgramiv(program, GL_LINK_STATUS, &success);
 	if (!success)
 	{
@@ -139,7 +157,7 @@ GraphicsPipeline::GraphicsPipeline(const GraphicsPipelineInfo& info)
 	m_id = program;
 }
 //=============================================================================
-GraphicsPipeline::~GraphicsPipeline()
+ShaderProgram::~ShaderProgram()
 {
 	if (m_id)
 	{
@@ -147,46 +165,54 @@ GraphicsPipeline::~GraphicsPipeline()
 	}
 }
 //=============================================================================
-GraphicsPipeline::GraphicsPipeline(GraphicsPipeline&& old) noexcept
+ShaderProgram::ShaderProgram(ShaderProgram&& old) noexcept
 	: m_id(std::exchange(old.m_id, 0))
 {
 }
 //=============================================================================
-GraphicsPipeline& GraphicsPipeline::operator=(GraphicsPipeline&& old) noexcept
+ShaderProgram& ShaderProgram::operator=(ShaderProgram&& old) noexcept
 {
 	if (this == &old) return *this;
 	m_id = std::exchange(old.m_id, 0);
 	return *this;
 }
 //=============================================================================
-void cmd::BindGraphicsPipeline(const GraphicsPipeline& pipeline)
+void cmd::BindShaderProgram(const ShaderProgram& pipeline)
 {
 	assert(pipeline.IsValid());
 
 	glUseProgram(pipeline.Handle());
 }
 //=============================================================================
-void cmd::SetViewport(const Rect2D& viewport)
+void cmd::SetViewport(uint16_t x, uint16_t y, uint16_t width, uint16_t height)
 {
-	if (currentViewport != viewport)
+	if (currentViewportX != x || currentViewportY != y 
+		|| currentViewportWidth != width || currentViewportHeight != height)
 	{
-		glViewport(static_cast<GLint>(viewport.x), static_cast<GLint>(viewport.y), static_cast<GLsizei>(viewport.width), static_cast<GLsizei>(viewport.height));
-		currentViewport = viewport;
+		glViewport(static_cast<GLint>(x), static_cast<GLint>(y), static_cast<GLsizei>(width), static_cast<GLsizei>(height));
+		currentViewportX      = x;
+		currentViewportY      = y;
+		currentViewportWidth  = width;
+		currentViewportHeight = height;
 	}
 }
 //=============================================================================
-void cmd::SetScissor(const Rect2D& scissor)
+void cmd::SetScissor(uint16_t x, uint16_t y, uint16_t width, uint16_t height)
 {
-	if (scissor.x == scissor.y == scissor.width == scissor.height == 0u)
+	if (x == y == width == height == 0u)
 	{
 		glDisable(GL_SCISSOR_TEST);
 	}
-	if (currentScissor != scissor)
+	else if (currentScissorX != x || currentScissorY != y
+		|| currentScissorWidth != width || currentScissorHeight != height)
 	{
 		glEnable(GL_SCISSOR_TEST);
-		glScissor(static_cast<GLint>(scissor.x), static_cast<GLint>(scissor.y), static_cast<GLsizei>(scissor.width), static_cast<GLsizei>(scissor.height));
+		glScissor(static_cast<GLint>(x), static_cast<GLint>(y), static_cast<GLsizei>(width), static_cast<GLsizei>(height));
 	}
-	currentScissor = scissor;
+	currentScissorX      = x;
+	currentScissorY      = y;
+	currentScissorWidth  = width;
+	currentScissorHeight = height;
 }
 //=============================================================================
 bool Render::Init(const RenderCreateInfo & createInfo)
@@ -201,7 +227,7 @@ void Render::Close()
 //=============================================================================
 void Render::BeginFrame()
 {
-	glEnable(GL_FRAMEBUFFER_SRGB);
+	//glEnable(GL_FRAMEBUFFER_SRGB);
 }
 //=============================================================================
 void Render::EndFrame()

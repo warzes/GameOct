@@ -98,7 +98,9 @@
     <ClCompile Include="NanoCore.cpp" />
     <ClCompile Include="NanoEngine.cpp" />
     <ClCompile Include="NanoInput.cpp" />
+    <ClCompile Include="NanoMath.cpp" />
     <ClCompile Include="NanoRender.cpp" />
+    <ClCompile Include="NanoRHI.cpp" />
     <ClCompile Include="NanoWindow.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -110,7 +112,9 @@
     <ClInclude Include="NanoEngine.h" />
     <ClInclude Include="NanoHeader.h" />
     <ClInclude Include="NanoInput.h" />
+    <ClInclude Include="NanoMath.h" />
     <ClInclude Include="NanoRender.h" />
+    <ClInclude Include="NanoRHI.h" />
     <ClInclude Include="NanoWindow.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
