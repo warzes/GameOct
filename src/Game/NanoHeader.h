@@ -63,6 +63,22 @@
 
 #endif // _WIN32
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtx/rotate_vector.hpp>
+#include <glm/gtx/compatibility.hpp>
+
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_opengl3.h>
+#include <imgui/imgui_impl_win32.h>
+
+#include <stb/stb_image.h>
+
 #if defined(_MSC_VER)
 #	pragma warning(pop)
 #endif

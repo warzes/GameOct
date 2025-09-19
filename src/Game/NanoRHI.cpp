@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "NanoRHI.h"
 #include "NanoCore.h"
-#include "NanoMath.h"
 //=============================================================================
 [[nodiscard]] inline std::string shaderStageToString(GLenum stage)
 {
@@ -179,33 +178,33 @@ void SetUniform(GLuint id, int s)
 	glUniform1i(id, s);
 }
 //=============================================================================
-void SetUniform(GLuint id, const Vec2& v)
+void SetUniform(GLuint id, const glm::vec2& v)
 {
-	glUniform2fv(id, 1, &v.x);
+	glUniform2fv(id, 1, glm::value_ptr(v));
 }
 //=============================================================================
-void SetUniform(GLuint id, const Vec3& v)
+void SetUniform(GLuint id, const glm::vec3& v)
 {
-	glUniform3fv(id, 1, &v.x);
+	glUniform3fv(id, 1, glm::value_ptr(v));
 }
 //=============================================================================
-void SetUniform(GLuint id, const Vec4& v)
+void SetUniform(GLuint id, const glm::vec4& v)
 {
-	glUniform4fv(id, 1, &v.x);
+	glUniform4fv(id, 1, glm::value_ptr(v));
 }
 //=============================================================================
-void SetUniform(GLuint id, const Quat& v)
+void SetUniform(GLuint id, const glm::quat& v)
 {
-	glUniform4fv(id, 1, &v.w);
+	glUniform4fv(id, 1, glm::value_ptr(v));
 }
 //=============================================================================
-void SetUniform(GLuint id, const Mat3& m)
+void SetUniform(GLuint id, const glm::mat3& m)
 {
-	glUniformMatrix3fv(id, 1, GL_FALSE, m.value);
+	glUniformMatrix3fv(id, 1, GL_FALSE, glm::value_ptr(m));
 }
 //=============================================================================
-void SetUniform(GLuint id, const Mat4& m)
+void SetUniform(GLuint id, const glm::mat4& m)
 {
-	glUniformMatrix4fv(id, 1, GL_FALSE, m.value);
+	glUniformMatrix4fv(id, 1, GL_FALSE, glm::value_ptr(m));
 }
 //=============================================================================

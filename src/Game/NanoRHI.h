@@ -26,9 +26,9 @@ void SpecifyVertexAttributes(GLuint shaderProgram, size_t vertexSize, std::span<
 int GetUniformLocation(GLuint program, std::string_view name);
 void SetUniform(GLuint id, float s);
 void SetUniform(GLuint id, int s);
-void SetUniform(GLuint id, const Vec2& v);
-void SetUniform(GLuint id, const Vec3& v);
-void SetUniform(GLuint id, const Vec4& v);
-void SetUniform(GLuint id, const Quat& v);
-void SetUniform(GLuint id, const Mat3& m);
-void SetUniform(GLuint id, const Mat4& m);
+void SetUniform(GLuint id, const glm::vec2& v);
+void SetUniform(GLuint id, const glm::vec3& v);
+void SetUniform(GLuint id, const glm::vec4& v);
+void SetUniform(GLuint id, const glm::quat& v);
+void SetUniform(GLuint id, const glm::mat3& m);
+void SetUniform(GLuint id, const glm::mat4& m);

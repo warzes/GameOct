@@ -2,6 +2,9 @@
 #include "NanoRender.h"
 #include "NanoCore.h"
 //=============================================================================
+#define MIN_FIELD_OF_VIEW	(glm::radians(01.0f))
+#define MAX_FIELD_OF_VIEW	(glm::radians(90.0f))
+//=============================================================================
 namespace
 {
 	uint16_t currentViewportX{ 0u };
@@ -14,6 +17,29 @@ namespace
 	uint16_t currentScissorY{ 0u };
 	uint16_t currentScissorWidth{ 0u };
 	uint16_t currentScissorHeight{ 0u };
+}
+//=============================================================================
+glm::mat4 Camera::Projection(float aspectratio) const
+{
+	return glm::perspective(FieldOfView, aspectratio, ZNear, ZFar);
+}
+//=============================================================================
+void Camera::ZoomIn(float angle)
+{
+	FieldOfView -= angle;
+	if (FieldOfView < MIN_FIELD_OF_VIEW)
+		FieldOfView = MIN_FIELD_OF_VIEW;
+	if (FieldOfView > MAX_FIELD_OF_VIEW)
+		FieldOfView = MAX_FIELD_OF_VIEW;
+}
+//=============================================================================
+void Camera::ZoomOut(float angle)
+{
+	FieldOfView += angle;
+	if (FieldOfView < MIN_FIELD_OF_VIEW)
+		FieldOfView = MIN_FIELD_OF_VIEW;
+	if (FieldOfView > MAX_FIELD_OF_VIEW)
+		FieldOfView = MAX_FIELD_OF_VIEW;
 }
 //=============================================================================
 void cmd::SetViewport(uint16_t x, uint16_t y, uint16_t width, uint16_t height)

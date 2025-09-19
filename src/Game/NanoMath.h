@@ -1,46 +1,34 @@
 #pragma once
 
-struct Vec2 final
+class Transformation
 {
-	float x{ 0.0f };
-	float y{ 0.0f };
-};
+public:
+	Transformation() = default;
+	Transformation(const glm::vec3& position, const glm::quat& rotation = glm::quat(1, 0, 0, 0));
+	Transformation(const glm::mat4& matrix);
 
-struct Vec3 final
-{
-	float x{ 0.0f };
-	float y{ 0.0f };
-	float z{ 0.0f };
-};
+	glm::vec3 Forward() const;
+	glm::vec3 Back() const;
+	glm::vec3 Left() const;
+	glm::vec3 Right() const;
+	glm::vec3 Up() const;
+	glm::vec3 Down() const;
 
-struct Vec4 final
-{
-	float x{ 0.0f };
-	float y{ 0.0f };
-	float z{ 0.0f };
-	float w{ 0.0f };
-};
+	glm::mat4 Matrix(const glm::vec3& scalefactor = glm::vec3(1, 1, 1)) const;
+	glm::mat4 LookAt() const;
 
-struct Quat final
-{
-	float w{ 0.0f };
-	float x{ 0.0f };
-	float y{ 0.0f };
-	float z{ 0.0f };
-};
+	void Move(const glm::vec3& direction);
 
-struct Mat3 final
-{
-	[[nodiscard]] constexpr float& operator[](size_t i) noexcept { return value[i]; }
-	[[nodiscard]] constexpr const float& operator[](size_t i) const noexcept { return value[i]; }
+	void Pitch(float angle);
+	void Yaw(float angle);
+	void Roll(float angle);
 
-	float value[3 * 3] = { 0.0f };
-};
+	static Transformation Interpolate(
+		const Transformation& transformation1,
+		const Transformation& transformation2,
+		float weight);
 
-struct Mat4 final
-{
-	[[nodiscard]] constexpr float& operator[](size_t i) noexcept { return value[i]; }
-	[[nodiscard]] constexpr const float& operator[](size_t i) const noexcept { return value[i]; }
+	glm::vec3 Position = { 0, 0, 0 };
+	glm::quat Rotation;
 
-	float value[4 * 4] = { 0.0f };
 };

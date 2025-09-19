@@ -11,13 +11,15 @@ const char* sceneVertexSource = R"glsl(
 in layout (location = 0) vec3 in_position;
 in layout (location = 1) vec4 in_color;
 
-uniform vec3 position_offset = vec3(0, 0, 0);
+uniform mat4 Model;
+uniform mat4 View;
+uniform mat4 Projection;
 
 out vec4 color;
 
 void main()
 {
-	gl_Position = vec4(position_offset + in_position, 1);
+	gl_Position = Projection * View * Model * vec4(in_position, 1);
 	color = in_color;
 }
 )glsl";
@@ -37,8 +39,8 @@ void main()
 
 struct Vertex
 {
-	Vec3 position;
-	Vec4 color;
+	glm::vec3 position;
+	glm::vec4 color;
 };
 std::vector<Vertex> vertices;
 VertexAttribute attributes[] =
@@ -62,12 +64,40 @@ GLuint program;
 GLuint vao;
 GLuint vbo;
 
+struct Scene
+{
+	Scene()
+	{
+		camera.Position = glm::vec3(0, 0, 10);
+		camera.Yaw(glm::radians(180.0f));
+
+		triangles.push_back(Transformation(glm::vec3(-2, 0, 0)));
+		triangles.push_back(Transformation(glm::vec3(2, 0, 0)));
+		triangles.push_back(Transformation(glm::vec3(2, 0, 2)));
+		triangles.push_back(Transformation(glm::vec3(-2, 0, 2)));
+	}
+
+	void AnimateNextFrame(float timestep)
+	{
+		for (auto it = triangles.begin(); it != triangles.end(); it++)
+			it->Yaw(glm::radians(90.0f * timestep));
+	}
+
+	Camera camera;
+
+	std::list<Transformation> triangles;
+};
+
+Scene scene;
+
 bool InitGame()
 {
 	AppCreateInfo appCI{};
 
 	if (!app::Init(appCI))
 		return false;
+
+	glEnable(GL_DEPTH_TEST);
 
 	program = CreateShaderProgram(sceneVertexSource, sceneFragmentSource);
 	
@@ -77,9 +107,9 @@ bool InitGame()
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-	vertices.push_back(Vertex(Vec3(0, 0, 0), Vec4(1, 0, 0, 1)));
-	vertices.push_back(Vertex(Vec3(1, 0, 0), Vec4(0, 1, 0, 1)));
-	vertices.push_back(Vertex(Vec3(0, 1, 0), Vec4(0, 0, 1, 1)));
+	vertices.push_back(Vertex(glm::vec3(0, 0, 0), glm::vec4(1, 0, 0, 1)));
+	vertices.push_back(Vertex(glm::vec3(1, 0, 0), glm::vec4(0, 1, 0, 1)));
+	vertices.push_back(Vertex(glm::vec3(0, 1, 0), glm::vec4(0, 0, 1, 1)));
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 
@@ -106,19 +136,29 @@ void FrameGame()
 		app::Exit();
 		return;
 	}
-		
+
+	float aspectratio = window.GetWindowAspect();
+
+	glm::mat4 View = scene.camera.LookAt();
+	glm::mat4 Projection = scene.camera.Projection(aspectratio);
+			
 	cmd::SetViewport( 0u, 0u, window.GetWidth(), window.GetHeight());
 	glClearColor(0.1f, 0.2f, 0.7f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glUseProgram(program);
-
-	static float x = 3.0f;  x += 0.001f;
-	Vec3 position_offset = Vec3(sinf(x), 0, 0);
-	SetUniform(GetUniformLocation(program, "position_offset"), position_offset);
+	
+	SetUniform(GetUniformLocation(program, "View"), View);
+	SetUniform(GetUniformLocation(program, "Projection"), Projection);
 
 	glBindVertexArray(vao);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+
+	for (auto it = scene.triangles.begin(); it != scene.triangles.end(); it++)
+	{
+		glm::mat4 Model = it->Matrix();
+		SetUniform(GetUniformLocation(program, "Model"), Model);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+	}
 }
 //=============================================================================
 int main(
