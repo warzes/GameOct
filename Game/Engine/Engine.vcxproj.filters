@@ -74,6 +74,9 @@
     <ClInclude Include="NanoMath.h">
       <Filter>Engine\math</Filter>
     </ClInclude>
+    <ClInclude Include="Heightmap.h">
+      <Filter>Engine\Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -140,6 +143,9 @@
     <ClCompile Include="NanoMath.cpp">
       <Filter>Engine\math</Filter>
     </ClCompile>
+    <ClCompile Include="Heightmap.cpp">
+      <Filter>Engine\Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -174,6 +180,9 @@
     </Filter>
     <Filter Include="Engine\math">
       <UniqueIdentifier>{c3d3e897-ec73-41a3-bc59-42650cbda9cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Utilities">
+      <UniqueIdentifier>{6b3ec0da-aed0-4324-b5a4-97fed4ff7d5f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

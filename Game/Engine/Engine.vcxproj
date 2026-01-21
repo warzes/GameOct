@@ -93,6 +93,7 @@
     <ClInclude Include="EngineConfig.h" />
     <ClInclude Include="Framebuffer.h" />
     <ClInclude Include="GridAxis.h" />
+    <ClInclude Include="Heightmap.h" />
     <ClInclude Include="NanoCore.h" />
     <ClInclude Include="NanoEngine.h" />
     <ClInclude Include="NanoIO.h" />
@@ -119,6 +120,7 @@
   <ItemGroup>
     <ClCompile Include="Framebuffer.cpp" />
     <ClCompile Include="GridAxis.cpp" />
+    <ClCompile Include="Heightmap.cpp" />
     <ClCompile Include="NanoCore.cpp" />
     <ClCompile Include="NanoEngine.cpp" />
     <ClCompile Include="NanoIO.cpp" />

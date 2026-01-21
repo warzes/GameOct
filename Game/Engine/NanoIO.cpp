@@ -33,19 +33,41 @@ std::string io::GetFileName(const std::string& filePath)
 std::string io::GetFileNameWithoutExtension(const std::string& filePath)
 {
 	std::filesystem::path path(filePath);
-	std::string fileName = GetFileName(filePath);
-	std::string extension = GetFileExtension(filePath);
-
-	if (!extension.empty())
-		return fileName.substr(0, fileName.size() - extension.size());
-
-	return fileName;
+	return path.filename().replace_extension().string();
 }
 //=============================================================================
 std::string io::GetFileDirectory(const std::string& filePath)
 {
 	std::filesystem::path path(filePath);
 	return path.parent_path().string() + "/";
+}
+//=============================================================================
+long long io::GetFileLastWriteTime(const std::string& filePath)
+{
+	std::filesystem::path path(filePath);
+	return std::filesystem::last_write_time(path).time_since_epoch().count();
+}
+//=============================================================================
+void io::NormalizePathInline(std::string& filePath)
+{
+	for (char& c : filePath)
+	{
+		if (c == '\\')
+		{
+			c = '/';
+		}
+	}
+	if (filePath.find("./") == 0)
+	{
+		filePath = std::string(filePath.begin() + 2, filePath.end());
+	}
+}
+//=============================================================================
+std::string io::NormalizePath(const std::string& filePath)
+{
+	std::string output = std::string(filePath.begin(), filePath.end());
+	NormalizePathInline(output);
+	return output;
 }
 //=============================================================================
 // see https://stackoverflow.com/questions/2602013/read-whole-ascii-file-into-c-stdstring
