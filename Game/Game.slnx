@@ -25,5 +25,5 @@
     <BuildDependency Project="3rdparty/3rdparty.vcxproj" />
     <BuildDependency Project="Engine/Engine.vcxproj" />
   </Project>
-  <Project Path="Warlord/Warlord.vcxproj" />
+  <Project Path="Warlord/Warlord.vcxproj" Id="ee60e553-7f33-4eb0-955d-6df8951e5831" />
 </Solution>

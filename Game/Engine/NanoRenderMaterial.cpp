@@ -1,5 +1,5 @@
 ﻿#include "stdafx.h"
-#include "NanoRenderMaterial.h"
+#include "Material.h"
 
 void MaterialShaderSlot::Bind(GLuint program, const Material& material)
 {

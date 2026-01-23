@@ -14,8 +14,8 @@
 #include <Engine/NanoOpenGL3Advance.h>
 
 #include <Engine/NanoRender.h>
-#include <Engine/NanoRenderGeometryGen.h>
-#include <Engine/NanoRenderModel.h>
+#include <Engine/GeometryGen.h>
+#include <Engine/Model.h>
 
 #include <Engine/Transform.h>
 #include <Engine/NanoScene.h>

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "NanoRenderMaterial.h"
+#include "Material.h"
 #include "NanoMath.h"
 #include "NanoOpenGL3.h"
 #include "OGLShader.h"

@@ -1,5 +1,5 @@
 ﻿#include "stdafx.h"
-#include "NanoRenderMesh.h"
+#include "Mesh.h"
 //=============================================================================
 Mesh::Mesh(const std::vector<MeshVertex>& vertices, const std::vector<uint32_t>& indices, std::optional<Material> material, std::optional<PBRMaterial> pbrMaterial)
 {

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "NanoRenderMesh.h"
+#include "Mesh.h"
 
 namespace GeometryGenerator
 {

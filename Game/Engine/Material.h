@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "NanoRenderTextures.h"
+#include "Textures.h"
 
 struct Material;
 

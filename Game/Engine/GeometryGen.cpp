@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
-#include "NanoRenderGeometryGen.h"
-#include "NanoRenderTextures.h"
+#include "GeometryGen.h"
+#include "Textures.h"
 //=============================================================================
 MeshInfo GeometryGenerator::CreatePlane(float width, float height, float wSegment, float hSegment)
 {

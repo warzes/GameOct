@@ -2,8 +2,8 @@
 
 #include "NanoOpenGL3Advance.h"
 #include "NanoMath.h"
-#include "NanoRenderTextures.h"
-#include "NanoRenderMaterial.h"
-#include "NanoRenderMesh.h"
-#include "NanoRenderModel.h"
-#include "NanoRenderGeometryGen.h"
+#include "Textures.h"
+#include "Material.h"
+#include "Mesh.h"
+#include "Model.h"
+#include "GeometryGen.h"
