@@ -22,15 +22,7 @@ enum class BufferUsage : uint8_t
 
 GLuint GetCurrentBuffer(BufferTarget target);
 
-//=============================================================================
-// Object Handles
-//=============================================================================
 struct BufferHandle final { GLuint handle{ 0u }; };
 
-//=============================================================================
-// Buffer
-//=============================================================================
-
 BufferHandle CreateBuffer(BufferTarget target, BufferUsage usage, size_t size, const void* data);
-
 void BufferSubData(BufferHandle bufferId, BufferTarget target, GLintptr offset, GLsizeiptr size, const void* data);

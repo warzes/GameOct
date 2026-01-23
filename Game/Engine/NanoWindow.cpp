@@ -211,20 +211,21 @@ void input::Update()
 //=============================================================================
 void input::SetCursorVisible(bool state)
 {
+	bool isHoldingMouse = RGFW_window_isRawMouseMode(window::handle) && RGFW_window_isCaptured(window::handle);
 	if (state)
 	{
-		if (RGFW_window_isHoldingMouse(window::handle))
+		if (isHoldingMouse)
 		{
 			RGFW_window_showMouse(window::handle, 1);
-			RGFW_window_unholdMouse(window::handle);
+			RGFW_window_captureRawMouse(window::handle, RGFW_FALSE);
 		}
 	}
 	else
 	{
-		if (!RGFW_window_isHoldingMouse(window::handle))
+		if (!isHoldingMouse)
 		{
 			RGFW_window_showMouse(window::handle, 0);
-			RGFW_window_holdMouse(window::handle);
+			RGFW_window_captureRawMouse(window::handle, RGFW_TRUE);
 		}
 	}
 }
