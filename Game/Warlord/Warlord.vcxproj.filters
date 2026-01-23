@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="GameApp.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="GameScene.cpp">
+      <Filter>GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderPass2.cpp">
+      <Filter>RenderPass</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderPassFinal.cpp">
+      <Filter>RenderPass</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameApp.h" />
+    <ClInclude Include="GameConfig.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="GameModel.h">
+      <Filter>GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameWorldData.h">
+      <Filter>GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderPass2.h">
+      <Filter>RenderPass</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderPassFinal.h">
+      <Filter>RenderPass</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="GameScene">
+      <UniqueIdentifier>{2f8fe1ae-ece9-4f29-af6f-de5e00d5f6e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenderPass">
+      <UniqueIdentifier>{26ec42b1-776d-485f-a1cd-c4b9267ee1c2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

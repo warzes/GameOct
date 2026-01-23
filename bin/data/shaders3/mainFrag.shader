@@ -76,9 +76,9 @@ void main()
 	// light.intensity = 5.0;
 
 	Fog fog;
-	fog.color = vec3(0.5, 0.5, 0.5);
-	fog.start = 30.0;
-	fog.end = 80.0;
+	fog.color = vec3(0.5, 0.5, 0.8);
+	fog.start = 50.0;
+	fog.end = 100.0;
 	fog.density = 0.1;
 
 	vec4 diffuse = vec4(fs_in.vertColor, 1.0);
