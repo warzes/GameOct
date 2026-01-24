@@ -83,7 +83,7 @@ bool OGLContextInit()
 	const int openGLVersion = gladLoadGL(RGFW_getProcAddress_OpenGL);
 	if (openGLVersion < GLAD_MAKE_VERSION(3, 3))
 	{
-		Fatal("Failed to initialize OpenGL context!");
+		Fatal("Failed to initialize OpenGL 3.3 context!");
 		return false;
 	}
 

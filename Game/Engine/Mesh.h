@@ -2,9 +2,9 @@
 
 #include "Material.h"
 #include "NanoMath.h"
-#include "NanoOpenGL3.h"
+#include "NanoOpenGL3Advance.h"
 #include "OGLShader.h"
-#include "OGLVertexAttribute.h"
+#include "VertexTypes.h"
 
 struct MeshInfo final
 {

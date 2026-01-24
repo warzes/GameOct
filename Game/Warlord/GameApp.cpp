@@ -22,8 +22,10 @@ void GameApp()
 		camera.MovementSpeed = 10.0f;
 		camera.SetPosition(glm::vec3(0.0f, 2.5f, -1.0f));
 
-		modelLevel.model.Load("data/models/ForgottenPlains/Forgotten_Plains_Demo.obj", ModelMaterialType::BlinnPhong);
-		modelLevel.modelMat = glm::translate(glm::mat4(1.0f), glm::vec3(-30.0f, -10.0f, 15.0f));
+		//modelLevel.model.Load("data/models/ForgottenPlains/Forgotten_Plains_Demo.obj", ModelMaterialType::BlinnPhong);
+		//modelLevel.modelMat = glm::translate(glm::mat4(1.0f), glm::vec3(-30.0f, -10.0f, 15.0f));
+
+		modelLevel.model.Load("data/models/spaceCompound/spaceCompound.obj", ModelMaterialType::BlinnPhong);
 
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);

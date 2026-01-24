@@ -88,7 +88,7 @@ void RenderPass2::drawScene(const GameWorldData& gameData)
 //=============================================================================
 bool RenderPass2::initProgram()
 {
-	m_program = LoadShaderProgram("data/shaders3/mainVert.shader", "data/shaders3/mainFrag.shader");
+	m_program = LoadShaderProgram("data/shaders4/mainVert.shader", "data/shaders4/mainFrag.shader");
 	if (!m_program.handle)
 	{
 		Fatal("Scene Main RenderPass Shader failed!");

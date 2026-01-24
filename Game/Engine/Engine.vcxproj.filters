@@ -9,13 +9,13 @@
       <Filter>Advance\addon</Filter>
     </ClInclude>
     <ClInclude Include="NanoCore.h">
-      <Filter>Engine\core</Filter>
+      <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="NanoIO.h">
-      <Filter>Engine\core</Filter>
+      <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="NanoLog.h">
-      <Filter>Engine\core</Filter>
+      <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="NanoWindow.h">
       <Filter>Engine\App</Filter>
@@ -42,13 +42,13 @@
       <Filter>Engine\Render</Filter>
     </ClInclude>
     <ClInclude Include="NanoScene.h">
-      <Filter>Engine\scene</Filter>
+      <Filter>Engine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="EngineConfig.h">
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
-      <Filter>Engine\scene</Filter>
+      <Filter>Engine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="NanoOpenGL3.h">
       <Filter>Engine\OpenGL\Old</Filter>
@@ -72,10 +72,13 @@
       <Filter>Engine\OpenGL\OGLResources</Filter>
     </ClInclude>
     <ClInclude Include="NanoMath.h">
-      <Filter>Engine\math</Filter>
+      <Filter>Engine\Math</Filter>
     </ClInclude>
     <ClInclude Include="Heightmap.h">
       <Filter>Engine\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexTypes.h">
+      <Filter>Engine\Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -87,13 +90,13 @@
       <Filter>Advance\addon</Filter>
     </ClCompile>
     <ClCompile Include="NanoCore.cpp">
-      <Filter>Engine\core</Filter>
+      <Filter>Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="NanoIO.cpp">
-      <Filter>Engine\core</Filter>
+      <Filter>Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="NanoLog.cpp">
-      <Filter>Engine\core</Filter>
+      <Filter>Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="NanoEngine.cpp">
       <Filter>Engine\App</Filter>
@@ -107,7 +110,7 @@
     <ClCompile Include="GeometryGen.cpp">
       <Filter>Engine\Render</Filter>
     </ClCompile>
-    <ClCompile Include="NanoRenderMaterial.cpp">
+    <ClCompile Include="Material.cpp">
       <Filter>Engine\Render</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
@@ -120,7 +123,7 @@
       <Filter>Engine\Render</Filter>
     </ClCompile>
     <ClCompile Include="NanoScene.cpp">
-      <Filter>Engine\scene</Filter>
+      <Filter>Engine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="NanoOpenGL3.cpp">
       <Filter>Engine\OpenGL\Old</Filter>
@@ -141,10 +144,13 @@
       <Filter>Engine\OpenGL\OGLResources</Filter>
     </ClCompile>
     <ClCompile Include="NanoMath.cpp">
-      <Filter>Engine\math</Filter>
+      <Filter>Engine\Math</Filter>
     </ClCompile>
     <ClCompile Include="Heightmap.cpp">
       <Filter>Engine\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexTypes.cpp">
+      <Filter>Engine\Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -157,14 +163,8 @@
     <Filter Include="Engine\OpenGL">
       <UniqueIdentifier>{d9e1fa9f-2017-4589-9207-487567897cc8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\core">
-      <UniqueIdentifier>{53aab21b-bba6-44a6-9b7c-20bb5f5aa6e6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Render">
       <UniqueIdentifier>{7b1033fe-17a2-4352-a224-12da2b7bc6df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\scene">
-      <UniqueIdentifier>{55dc66e2-a8e0-4a1b-b7ab-e8922c969627}</UniqueIdentifier>
     </Filter>
     <Filter Include="Advance">
       <UniqueIdentifier>{c52ed9b7-9ca9-4a2a-b10f-984e6c656fc0}</UniqueIdentifier>
@@ -175,14 +175,20 @@
     <Filter Include="Engine\OpenGL\OGLResources">
       <UniqueIdentifier>{8512fdc1-3326-4780-98e6-6faf852185a5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\math">
-      <UniqueIdentifier>{c3d3e897-ec73-41a3-bc59-42650cbda9cd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Utilities">
       <UniqueIdentifier>{6b3ec0da-aed0-4324-b5a4-97fed4ff7d5f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Advance\addon">
       <UniqueIdentifier>{3bb12332-32a3-4679-9145-55aae33c61d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Scene">
+      <UniqueIdentifier>{55dc66e2-a8e0-4a1b-b7ab-e8922c969627}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core">
+      <UniqueIdentifier>{53aab21b-bba6-44a6-9b7c-20bb5f5aa6e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Math">
+      <UniqueIdentifier>{c3d3e897-ec73-41a3-bc59-42650cbda9cd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

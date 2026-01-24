@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "NanoOpenGL3Advance.h"
+#include "NanoOpenGL3.h"
 
 struct Texture2D final
 {
